@@ -1,0 +1,9 @@
+body{
+    background : black;
+}
+
+section{
+   display: block;
+   margin-left: auto;
+   margin-right: auto
+}
