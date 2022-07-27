@@ -27,4 +27,4 @@ def getLink():
     imagem = lista[len(lista) -1]["src"].replace("static", "vignette")
 
     # Retorna o nome do perfil e a imagem de "perfil" mais recente
-    return (soup.h1.getText(), imagem)
+    return soup.h1.getText(), imagem
