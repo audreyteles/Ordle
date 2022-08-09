@@ -10,25 +10,29 @@ valor = 0
 today = date.today()
 
 
-@app.get("/")
+@app.route('/', methods=['POST', 'GET',])
 def index():
-    dia = today.strftime("%d")
+    data = today.strftime("%d/%m")
 
     if session.get('pontos') is None:
         session['pontos'] = 5
         session['blur'] = 25
 
     global nome, imagem
+
     personagem = open('lista.json')
     dados = json.load(personagem)
-    if dia == dados['dia']:
+
+    if data == dados['data']:
         nome = dados['nome']
         imagem = dados['imagem']
 
     else:
         with open('lista.json', 'w') as f:
+            session['pontos'] = 5
+            session['blur'] = 25
             nome, imagem = getLink()
-            json.dump({'dia': dia,
+            json.dump({'data': data,
                        'nome': nome,
                        'imagem': imagem}, f, ensure_ascii=False)
 
@@ -37,16 +41,19 @@ def index():
                            imagem=imagem)
 
 
-@app.post('/autenticar')
+@app.route('/autenticar', methods=['POST', 'GET',])
 def autenticar():
-    entrada = " " + request.form['entrada'] + " "
-    print(nome)
-    if entrada.lower() == nome.lower():
-        session['blur'] = 0
-        flash("Parabéns, você acertou!!")
+    if request.method == 'POST':
+        entrada = " " + request.form['entrada'] + " "
+        print(nome)
+        if entrada.lower() == nome.lower():
+            session['blur'] = 0
+            flash("Parabéns, você acertou!!")
 
+        else:
+            session['pontos'] = session['pontos'] - 1
+            session['blur'] = session['blur'] - 5
+
+        return redirect(url_for('index'))
     else:
-        session['pontos'] = session['pontos'] - 1
-        session['blur'] = session['blur'] - 5
-
-    return redirect(url_for('index'))
+        return redirect(url_for('index'))

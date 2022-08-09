@@ -1,10 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup as bs
 from random import randrange
-import json
-
-from flask import url_for
-
 
 def tratarHtml(url):
     response = urlopen(url)
