@@ -65,7 +65,7 @@
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-5 col-md-3">
                 <!-- https://www.flaticon.com/br/icone-gratis/d20_6654545?term=d20&page=1&position=20&page=1&position=20&related_id=6654545&origin=search# -->
-                {% for i in range (0, pnt) %}
+                {% for i in range (0, session['pontos']) %}
                 <img src="{{url_for('static', filename='d20.png')}}" width="57px">
                 {% endfor %}
             </div>
