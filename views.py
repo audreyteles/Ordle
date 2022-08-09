@@ -3,33 +3,38 @@ from werkzeug.utils import redirect
 from app import app
 from flask import flash, render_template, request, url_for, session
 from web_scraping import getLink
-import time
-nome = ""
-imagem = ""
-app.secret_key = 'super secret key'
+from datetime import date
+import json
 
 valor = 0
+today = date.today()
+
+
 @app.get("/")
 def index():
+    dia = today.strftime("%d")
 
     if session.get('pontos') is None:
         session['pontos'] = 5
         session['blur'] = 25
 
     global nome, imagem
-    global valor
-    if int(time.strftime("%H")) > 0 and valor ==0:
+    personagem = open('lista.json')
+    dados = json.load(personagem)
+    if dia == dados['dia']:
+        nome = dados['nome']
+        imagem = dados['imagem']
 
-            valor = valor + 1
-            session['pontos'] = 5
-            session['blur'] = 25
+    else:
+        with open('lista.json', 'w') as f:
             nome, imagem = getLink()
+            json.dump({'dia': dia,
+                       'nome': nome,
+                       'imagem': imagem}, f, ensure_ascii=False)
 
     return render_template("template.html",
                            personagem=nome,
-                           imagem=imagem,
-                           blur=10,
-                           pontos=5)
+                           imagem=imagem)
 
 
 @app.post('/autenticar')
