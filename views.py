@@ -45,7 +45,6 @@ def index():
 def autenticar():
     if request.method == 'POST':
         entrada = " " + request.form['entrada'] + " "
-        print(nome)
         if entrada.lower() == nome.lower():
             session['blur'] = 0
             flash("Parabéns, você acertou!!")
