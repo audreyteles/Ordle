@@ -3,12 +3,11 @@ from werkzeug.utils import redirect
 from app import app
 from flask import flash, render_template, request, url_for, session
 from web_scraping import getLink
-from localStoragePy import localStoragePy
 import time
 nome = ""
 imagem = ""
 app.secret_key = 'super secret key'
-localStorage = localStoragePy('app', 'json')
+
 valor = 0
 @app.get("/")
 def index():
@@ -16,8 +15,6 @@ def index():
     if session.get('pontos') is None:
         session['pontos'] = 5
         session['blur'] = 25
-
-
 
     global nome, imagem
     global valor
@@ -32,9 +29,7 @@ def index():
                            personagem=nome,
                            imagem=imagem,
                            blur=10,
-                           pontos=5,
-                           localStorage=localStorage,
-                           int=int)
+                           pontos=5)
 
 
 @app.post('/autenticar')
@@ -48,7 +43,5 @@ def autenticar():
     else:
         session['pontos'] = session['pontos'] - 1
         session['blur'] = session['blur'] - 5
-        localStorage.setItem('pontos', int(localStorage.getItem('pontos'))-1)
-        localStorage.setItem('blur', int(localStorage.getItem('blur'))-5)
 
     return redirect(url_for('index'))
