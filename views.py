@@ -7,6 +7,7 @@ from localStoragePy import localStoragePy
 
 nome = ""
 imagem = ""
+app.secret_key = 'super secret key'
 localStorage = localStoragePy('app', 'json')
 @app.get("/")
 def index():
