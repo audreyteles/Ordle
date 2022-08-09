@@ -27,26 +27,12 @@
         </div>
     </div>
 </nav>
-<!-- end navbar 
 
-<script>
-    const zeroFill = n => {
-        return ('0' + n).slice(-2);
-    }
-    const interval = setInterval(() => {
-        const now = new Date();
-
-        const Time = zeroFill(now.getHours()) + ':' + zeroFill( now.getMinutes()) + ':' + zeroFill(now.getSeconds());
-        
-        document.getElementById('time').innerHTML = Time;
-    }, 1000);
-</script>
--->
 {% set nome = personagem %}
 
 <form method="POST" action="{{ url_for('autenticar') }}">
     <div id="imagem" class="rounded mx-auto d-flex align-items-center justify-content-center"
-         style="background-image: url('{{imagem}}'); filter: blur({{int(localStorage.getItem('blur'))}}px);"></div>
+         style="background-image: url('{{imagem}}'); filter: blur({{session['blur']}}px);"></div>
     <br>
     <div class="container rounded mx-auto d-block">
         <div class="row d-flex align-items-center justify-content-center">
@@ -57,16 +43,23 @@
                 </div>
             </div>
         </div>
+        {% if session['blur'] == 0 or session['pontos'] == 0 %}
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary" value="submit" disabled>Adivinhar</button>
+            </div>
+        </div>
+        {% else %}
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-6 col-md-3">
                 <button type="submit" class="btn btn-primary" value="submit">Adivinhar</button>
             </div>
         </div>
-
+        {% endif %}
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-5 col-md-3">
                 <!-- https://www.flaticon.com/br/icone-gratis/d20_6654545?term=d20&page=1&position=20&page=1&position=20&related_id=6654545&origin=search# -->
-                {% for i in range (0, int(localStorage.getItem('pontos')))%}
+                {% for i in range (0, session['pontos'])%}
                 <img src="{{url_for('static', filename='d20.png')}}" width="57px">
                 {% endfor %}
             </div>
@@ -82,11 +75,19 @@
                 </ul>
             </div>
         </div>
-        {% elif 1==0 %}
+        {% elif session['pontos']<=0 %}
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-5 col-md-3">
                 <ul id="messages" class="list-unstyled">
                     <li class="alert alert-light">Você perdeu! {{nome}}</li>
+                </ul>
+            </div>
+        </div>
+        {%elif session['pontos']<5 %}
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-5 col-md-3">
+                <ul id="messages" class="list-unstyled">
+                    <li class="alert alert-light">Você errou!!</li>
                 </ul>
             </div>
         </div>
