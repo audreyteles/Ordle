@@ -41,22 +41,56 @@
     }, 1000);
 </script>
 -->
+{% set nome = personagem %}
+{% set pnt = pontos %}
 
 <form method="POST" action="{{ url_for('autenticar') }}">
-    <div id="imagem" class="rounded mx-auto d-flex align-items-center justify-content-center" style="background-image: url('{{imagem}}'); filter: blur({{blur}}px);"></div>
+    <div id="imagem" class="rounded mx-auto d-flex align-items-center justify-content-center"
+         style="background-image: url('{{imagem}}'); filter: blur({{session['blur']}}px);"></div>
     <br>
     <div class="container rounded mx-auto d-block">
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-6 col-md-3">
-                <input type="text" class="form-control" placeholder="Pesquise aqui">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">&#128269;</span>
+                    <input type="text" class="form-control" placeholder="Pesquise aqui" name="entrada">
+                </div>
             </div>
         </div>
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-6 col-md-3">
-            <button type="button" class="btn btn-primary" action="submit">Adivinhar</button>
+                <button type="submit" class="btn btn-primary" value="submit">Adivinhar</button>
             </div>
         </div>
-    </div>
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-5 col-md-3">
+                <!-- https://www.flaticon.com/br/icone-gratis/d20_6654545?term=d20&page=1&position=20&page=1&position=20&related_id=6654545&origin=search# -->
+                {% for i in range (0, pnt) %}
+                <img src="{{url_for('static', filename='d20.png')}}" width="57px">
+                {% endfor %}
+            </div>
+        </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages  %}
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-5 col-md-3">
+                <ul id="messages" class="list-unstyled">
+                    {% for message in messages %}
+                    <li class="alert alert-light">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% elif 1==0 %}
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="col-5 col-md-3">
+                <ul id="messages" class="list-unstyled">
+                    <li class="alert alert-light">Você perdeu! {{nome}}</li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
 </form>
 
 </body>
