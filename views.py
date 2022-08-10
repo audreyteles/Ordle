@@ -10,28 +10,26 @@ valor = 0
 today = date.today()
 
 
-@app.route('/', methods=['POST', 'GET', ])
+@app.route('/', methods=['POST', 'GET',])
 def index():
-    global nome, imagem
-
     data = today.strftime("%d/%m")
 
     if session.get('pontos') is None:
         session['pontos'] = 5
         session['blur'] = 25
 
-    lista = open('lista.json')
-    dados = json.load(lista)
+    global nome, imagem
 
-    if data in dados['data']:
+    personagem = open('lista.json')
+    dados = json.load(personagem)
+
+    if data == dados['data']:
         nome = dados['nome']
         imagem = dados['imagem']
-        
+
     else:
-        session['pontos'] = 5
-        session['blur'] = 25
-        nome, imagem = getLink()
         with open('lista.json', 'w') as f:
+            nome, imagem = getLink()
             json.dump({'data': data,
                        'nome': nome,
                        'imagem': imagem}, f, ensure_ascii=False)
@@ -41,10 +39,11 @@ def index():
                            imagem=imagem)
 
 
-@app.route('/autenticar', methods=['POST', 'GET', ])
+@app.route('/autenticar', methods=['POST', 'GET',])
 def autenticar():
     if request.method == 'POST':
         entrada = " " + request.form['entrada'] + " "
+        print(nome)
         if entrada.lower() == nome.lower():
             session['blur'] = 0
             flash("Parabéns, você acertou!!")
