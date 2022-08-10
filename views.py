@@ -6,8 +6,6 @@ from web_scraping import getLink
 from datetime import date
 import json
 
-nome = ""
-imagem = ""
 valor = 0
 today = date.today()
 
@@ -25,19 +23,18 @@ def index():
     lista = open('lista.json')
     dados = json.load(lista)
 
-    if data == dados['data']:
+    if data in dados['data']:
         nome = dados['nome']
         imagem = dados['imagem']
+        
     else:
+        session['pontos'] = 5
+        session['blur'] = 25
+        nome, imagem = getLink()
         with open('lista.json', 'w') as f:
-            session['pontos'] = 5
-            session['blur'] = 25
-            try:
-                json.dump({'data': data,
-                           'nome': nome,
-                           'imagem': imagem}, f, ensure_ascii=False)
-            except:
-                pass
+            json.dump({'data': data,
+                       'nome': nome,
+                       'imagem': imagem}, f, ensure_ascii=False)
 
     return render_template("template.html",
                            personagem=nome,
