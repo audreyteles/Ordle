@@ -18,7 +18,12 @@ button{
 }
 
 .modal-body {
-    background: #2e2e2e;
+    background: #1f1f1f;
     color: white;
 }
 
+#dev{
+    padding:2px;
+    text-decoration: None;
+    color: white;
+}

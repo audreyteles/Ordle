@@ -5,12 +5,11 @@ from web_scraping import getLink
 from datetime import date
 import json
 
-valor = 0
 today = date.today()
-
 
 @app.route('/', methods=['POST', 'GET', ])
 def index():
+    session.permanent = True
     data = today.strftime("%d/%m")
 
     if session.get('pontos') is None:
@@ -27,8 +26,21 @@ def index():
         imagem = dados['imagem']
 
     else:
+        session['pontos'] = 5
+        session['blur'] = 25
         with open('lista.json', 'w') as f:
             nome, imagem = getLink()
+            texto = open('anteriores.txt', 'r')
+            itens = str(texto.read())
+
+            while nome in itens:
+                nome, imagem = getLink()
+
+            lista = ['', nome]
+
+            with open('anteriores.txt', 'a') as linha:
+                linha.writelines('\n'.join(lista))
+
             json.dump({'data': data,
                        'nome': nome,
                        'imagem': imagem}, f, ensure_ascii=False)
