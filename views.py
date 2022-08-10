@@ -1,4 +1,3 @@
-from urllib.request import urlopen, Request
 from werkzeug.utils import redirect
 from app import app
 from flask import flash, render_template, request, url_for, session
@@ -10,7 +9,7 @@ valor = 0
 today = date.today()
 
 
-@app.route('/', methods=['POST', 'GET',])
+@app.route('/', methods=['POST', 'GET', ])
 def index():
     data = today.strftime("%d/%m")
 
@@ -34,12 +33,12 @@ def index():
                        'nome': nome,
                        'imagem': imagem}, f, ensure_ascii=False)
 
-    return render_template("template.html",
+    return render_template("layout.html",
                            personagem=nome,
                            imagem=imagem)
 
 
-@app.route('/autenticar', methods=['POST', 'GET',])
+@app.route('/autenticar', methods=['POST', 'GET', ])
 def autenticar():
     if request.method == 'POST':
         entrada = " " + request.form['entrada'] + " "
@@ -47,7 +46,6 @@ def autenticar():
         if entrada.lower() == nome.lower():
             session['blur'] = 0
             flash("Parabéns, você acertou!!")
-
         else:
             session['pontos'] = session['pontos'] - 1
             session['blur'] = session['blur'] - 5
