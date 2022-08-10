@@ -6,25 +6,26 @@ from web_scraping import getLink
 from datetime import date
 import json
 
+nome = ""
+image = ""
 valor = 0
 today = date.today()
 
 
 @app.route('/', methods=['POST', 'GET', ])
 def index():
+    global nome, imagem
+
     data = today.strftime("%d/%m")
 
     if session.get('pontos') is None:
         session['pontos'] = 5
         session['blur'] = 25
 
-    global nome, imagem
-
-    personagem = open('lista.json')
-    dados = json.load(personagem)
+    lista = open('lista.json')
+    dados = json.load(lista)
 
     if data == dados['data']:
-        print(dados['nome'],dados['imagem'])
         nome = dados['nome']
         imagem = dados['imagem']
     else:
