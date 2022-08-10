@@ -31,7 +31,6 @@ def index():
         with open('lista.json', 'w') as f:
             session['pontos'] = 5
             session['blur'] = 25
-            nome, imagem = getLink()
             json.dump({'data': data,
                        'nome': nome,
                        'imagem': imagem}, f, ensure_ascii=False)
