@@ -5,7 +5,8 @@ from flask import flash, render_template, request, url_for, session
 from web_scraping import getLink
 from datetime import date
 import json
-
+nome = None
+imagem = None
 valor = 0
 today = date.today()
 
