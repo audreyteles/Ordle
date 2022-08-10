@@ -9,7 +9,6 @@ import json
 valor = 0
 today = date.today()
 
-
 @app.route('/', methods=['POST', 'GET',])
 def index():
     data = today.strftime("%d/%m")
