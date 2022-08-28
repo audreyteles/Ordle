@@ -1,49 +1,43 @@
 from werkzeug.utils import redirect
-from app import app
+from app import app, db
 from flask import flash, render_template, request, url_for, session
 from web_scraping import getLink
 from datetime import date
-import json
+from Models.InformacoesModel import Informacao
 
-today = date.today()
 
 @app.route('/', methods=['POST', 'GET', ])
 def index():
-    session.permanent = True
-    data = today.strftime("%d/%m")
+    global nome, imagem
 
+    session.permanent = True
+    data = date.today().strftime("%Y-%m-%d")
+
+    info = Informacao.query.filter_by(data=data).first()
+    try:
+        nome = info.nome
+        imagem = info.imagem
+    except:
+        pass
+
+    if info is None:
+        while True:
+            try:
+                nome, imagem = getLink()
+                existe = Informacao.query.filter_by(nome=nome).first()
+
+                if existe is None:
+                    add = Informacao(data=data, nome=nome, imagem=imagem)
+                    db.session.add(add)
+                    db.session.commit()
+                    session['pontos'] = 5
+                    session['blur'] = 25
+                    break
+            except:
+                pass
     if session.get('pontos') is None:
         session['pontos'] = 5
         session['blur'] = 25
-
-    global nome, imagem
-
-    personagem = open('lista.json')
-    dados = json.load(personagem)
-
-    if data == dados['data']:
-        nome = dados['nome']
-        imagem = dados['imagem']
-
-    else:
-        session['pontos'] = 5
-        session['blur'] = 25
-        with open('lista.json', 'w') as f:
-            nome, imagem = getLink()
-            texto = open('anteriores.txt', 'r')
-            itens = str(texto.read())
-
-            while nome in itens:
-                nome, imagem = getLink()
-
-            lista = ['', nome]
-
-            with open('anteriores.txt', 'a') as linha:
-                linha.writelines('\n'.join(lista))
-
-            json.dump({'data': data,
-                       'nome': nome,
-                       'imagem': imagem}, f, ensure_ascii=False)
 
     return render_template("layout.html",
                            personagem=nome,
