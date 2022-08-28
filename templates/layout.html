@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{url_for('static', filename='bootstrap.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>Ordle</title>
 
@@ -13,7 +13,7 @@
 <!-- navbar start -->
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{url_for('index')}}">Ordle</a>
+        <a class="navbar-brand" href="{{ url_for('index') }}">Ordle</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
@@ -46,7 +46,8 @@
                     </li>
                     <li class="d-flex gap-4">
                         <div>
-                            <h5 class="mb-0"><b>Referências</b></h5><p>
+                            <h5 class="mb-0"><b>Referências</b></h5>
+                            <p>
                             <p><a href="https://www.gamedle.wtf/"><b>GAMEDLE</b></a>
                             <p><a href="https://likewisetv.com/arcade/posterdle"><b>POSTERDLE</b></a>
                             <p><a href="https://ordemparanormal.fandom.com/"><b>Ordem Paranormal Wiki</b></a>
@@ -68,7 +69,7 @@
 
 <form method="POST" action="{{ url_for('autenticar') }}">
     <div id="imagem" class="rounded mx-auto d-flex align-items-center justify-content-center"
-         style="background-image: url('{{imagem}}'); filter: blur({{session['blur']}}px);"></div>
+         style="background-image: url('{{ imagem }}'); filter: blur({{ session['blur'] }}px);"></div>
     <br>
     <div class="container rounded mx-auto d-block">
         <div class="row d-flex align-items-center justify-content-center">
@@ -81,64 +82,76 @@
         </div>
 
         {% if session['blur'] <= 0 or session['pontos'] <= 0 %}
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-6 col-md-3">
-                <button type="submit" class="btn btn-primary" value="submit" disabled>Adivinhar</button>
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="col-6 col-md-3">
+                    <button type="submit" class="btn btn-primary" value="submit" disabled>Adivinhar</button>
+                </div>
             </div>
-        </div>
         {% else %}
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-6 col-md-3">
-                <button type="submit" class="btn btn-primary" value="submit">Adivinhar</button>
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="col-6 col-md-3">
+                    <button type="submit" class="btn btn-primary" value="submit">Adivinhar</button>
+                </div>
             </div>
-        </div>
         {% endif %}
         <div class="row d-flex align-items-center justify-content-center">
             <div class="col-5 col-md-3">
                 <!-- https://www.flaticon.com/br/icone-gratis/d20_6654545?term=d20&page=1&position=20&page=1&position=20&related_id=6654545&origin=search# -->
-                {% for i in range (0, session['pontos'])%}
-                <img src="{{url_for('static', filename='d20.png')}}" width="57px">
+                {% for i in range (0, session['pontos']) %}
+                    <img src="{{ url_for('static', filename='d20.png') }}" width="57px">
                 {% endfor %}
             </div>
         </div>
         {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-5 col-md-3">
-                <ul id="messages" class="list-unstyled">
-                    {% for message in messages %}
-                    <li class="alert alert-primary">{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-        {% elif session['pontos']<=0 %}
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-5 col-md-3">
-                <ul id="messages" class="list-unstyled">
-                    <li class="alert alert-danger"><p align="center">Você perdeu!<br>Personagem:{{personagem}}</p></li>
-                </ul>
-            </div>
-        </div>
-        {% elif session['pontos']<5 %}
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-5 col-md-3">
-                <ul id="messages" class="list-unstyled">
-                    <li class="alert alert-danger">Você errou!!</li>
-                </ul>
-            </div>
-        </div>
-        {% else %}
-        <div class="row d-flex align-items-center justify-content-center">
-            <div class="col-5 col-md-3">
-                <ul id="messages" class="list-unstyled">
-                    <li class="alert alert-secondary">Para jogar, tente acertar o nome completo do personagem, criatura
-                        ou animal antes das chances acabarem.
-                    </li>
-                </ul>
-            </div>
-        </div>
-        {% endif %}
+            {% if messages %}
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="col-5 col-md-3">
+                        <ul id="messages" class="list-unstyled">
+                            {% for message in messages %}
+                                <li class="alert alert-primary"><p align="center">Parabéns, você acertou!!<br>Personagem:{{ personagem }}
+                            </p></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            {% elif session['pontos']<=0 %}
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="col-5 col-md-3">
+                        <ul id="messages" class="list-unstyled">
+                            <li class="alert alert-danger"><p align="center">Você perdeu!<br>Personagem:{{ personagem }}
+                            </p></li>
+                        </ul>
+                    </div>
+                </div>
+            {% elif session['pontos']<5 and session['blur'] !=0 %}
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="col-5 col-md-3">
+                        <ul id="messages" class="list-unstyled">
+                            <li class="alert alert-danger">Você errou!!</li>
+                        </ul>
+                    </div>
+                </div>
+            {% elif session['blur'] == 25 %}
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="col-5 col-md-3">
+                        <ul id="messages" class="list-unstyled">
+                            <li class="alert alert-secondary">Para jogar, tente acertar o nome completo do personagem,
+                                criatura
+                                ou animal antes das chances acabarem.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row d-flex align-items-center justify-content-center">
+                    <div class="col-5 col-md-3">
+                        <ul id="messages" class="list-unstyled">
+                            <li class="alert alert-primary"><p align="center">Parabéns, você acertou!!<br>Personagem:{{ personagem }}
+                            </p></li>
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
         {% endwith %}
 </form>
 
